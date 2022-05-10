@@ -46,7 +46,7 @@ module.exports = {
                         return interaction.editReply({embeds: [assigmentEmbed], ephemeral: true});
                     }
                     value.events.forEach(event => {
-                        assigmentEmbed.addField(event.name, `${event.course.fullname}\nHatáridő: <t:${event.timesort}:R>\n${event.url}`);
+                        assigmentEmbed.addField(event.name, `${event.course.fullname}\nDue: <t:${event.timesort}:R>\n${event.url}`);
                         interaction.editReply({embeds: [assigmentEmbed], ephemeral: true});
                     });
                     return;
