@@ -40,16 +40,15 @@ module.exports = {
                     wsfunction: "core_calendar_get_calendar_upcoming_view",
             
                 }).then(function(value) {
-                    let i = 0;
+                    if(value.events.length === 0){
+                        assigmentEmbed.setTitle("You have no assignments!");
+                        assigmentEmbed.setDescription("You're all done for now! Good job!");
+                        return interaction.editReply({embeds: [assigmentEmbed], ephemeral: true});
+                    }
                     value.events.forEach(event => {
-
                         assigmentEmbed.addField(event.name, `${event.course.fullname}\nHatáridő: <t:${event.timesort}:R>\n${event.url}`);
-                        // if(i++ == 0){
-                        //     interaction.editReply({content: `${event.name} - ${event.course.fullname} - ${time}`, ephemeral: true});
-                        // }
                         interaction.editReply({embeds: [assigmentEmbed], ephemeral: true});
                     });
-                    //console.log(value.courses[0].assignments);
                     return;
                 });
             

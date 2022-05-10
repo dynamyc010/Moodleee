@@ -1,5 +1,5 @@
 const fs = require('node:fs');
-const { Client, Collection, Intents } = require('discord.js');
+const { Client, Collection, Intents, MessageEmbed } = require('discord.js');
 const config = require('./config.json');
 
 const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
@@ -16,21 +16,26 @@ for (const file of commandFiles) {
 }
 
 client.once('ready', () => {
-	console.log('Ready!');
+	console.log('Ready! I\'m active as of ' + client.readyAt + ', as ' + client.user.tag);
 });
 
 client.on('interactionCreate', async interaction => {
 	if (!interaction.isCommand()) return;
-
 	const command = client.commands.get(interaction.commandName);
-
 	if (!command) return;
 
 	try {
 		await command.execute(interaction);
 	} catch (error) {
 		console.error(error);
-		await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
+		await interaction.reply({ embeds: [
+			new MessageEmbed()
+				.setColor(config.colors.red)
+				.setTitle('Oh no! An error occurred!')
+				.setTimestamp()
+				.setDescription(`I'm so sorry, an error has occured!`)
+				.setFooter({ text: `Please try again later. ${error}` })
+		], ephemeral: true });
 	}
 });
 

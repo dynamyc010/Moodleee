@@ -22,6 +22,6 @@ prompt.get(properties, function (err, result) {
     return 1;
   }
 
-  harvester.tokenHarvest(result.username,result.password,{member: {id: '123456789'}});
+  harvester.tokenHarvest(result.username,result.password,{id: '123456789'});
 
 });

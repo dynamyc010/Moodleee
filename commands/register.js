@@ -40,21 +40,21 @@ module.exports = {
                 password: interaction.options.getString('password')
               }).then(function(client) {
                 if(contains(config.moodle.tokens, "discordid", interaction.member.id)){
-                  console.log("Token already exists for this discord user");
+                  //console.log("Token already exists for this discord user");
                   config.moodle.tokens[config.moodle.tokens.findIndex(x => x.discordid === interaction.member.id)].token = client.token;
                 }
                 else{
-                  console.log("Token does not exist for this discord user");
+                  //console.log("Token does not exist for this discord user");
                   config.moodle.tokens.push({"discordid": interaction.member.id, "token": client.token});
                 }
                 fs.writeFileSync('config.json', JSON.stringify(config, null, 2));
-                console.log('Token written to config.json successfully!');
+                //console.log('Token written to config.json successfully!');
                 successEmbed
                   .setDescription(`You are now connected to Moodle!`)
                 return interaction.editReply({embeds: [successEmbed], ephemeral: true});
               })
               .catch(function(err) {
-                console.log("Failed to log in: " + err);
+                //console.log("Failed to log in: " + err);
                 errorEmbed
                   .setDescription("Failed to connect your Moodle account!")
                   .setFooter({text: `Please try again later. ${err}`});
