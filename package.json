@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "main": "node index.js",
+    "start": "node index.js",
     "update-slash": "node slash-commands.js",
     "lint": "eslint . --ext .ts"
   },
