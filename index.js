@@ -25,12 +25,11 @@ const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('
 
 for (const file of commandFiles) {
 	const command = require(`./commands/${file}`);
-	// Set a new item in the Collection
-	// With the key as the command name and the value as the exported module
 	client.commands.set(command.data.name, command);
 }
 
 // Scheduler options
+// TODO: Read time from config
 const scheduler = cron.schedule("0 0 6,18 * * *", () => client.emit('scheduledGetAssignments', client),{scheduled: false, timezone: 'Europe/Budapest'},false,'Europe/Budapest')
 
 // Login and setup
