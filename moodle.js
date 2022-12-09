@@ -19,12 +19,13 @@ moodle.init({
     console.log("Unable to initialize the client: " + err);
 });
 
+var api_call = "core_fetch_notifications"
 
 function do_something(client) {
     // return client.get_courses().then(function(courses) {
     // }
     return client.call({
-        wsfunction: "core_calendar_get_calendar_upcoming_view",
+        wsfunction: api_call,
         //wsfunction: "core_course_get_contents",
         // args: {
         //     users: {
@@ -37,10 +38,10 @@ function do_something(client) {
         // courses.forEach(course => {
         //     return client.call({})
         // });
-        //fs.writeFileSync('core_calendar_get_calendar_upcoming_view.json', JSON.stringify(value, null, 2));
-        value.events.forEach(event => {
-            console.log(`${event.name} (${event.timesort})`);
-        });
+        fs.writeFileSync(`./confusion/${api_call}.json`, JSON.stringify(value, null, 2));
+        // value.events.forEach(event => {
+        //     console.log(`${event.name} (${event.timesort})`);
+        // });
         //console.log(value.courses[0].assignments);
         return;
     });

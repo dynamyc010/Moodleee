@@ -3,6 +3,9 @@ var moodle = require('moodle-client');
 var fs = require('fs');
 var { contains } = require('./misc');
 
+// TODO: Add a check to see if the token is valid
+// TODO: Replace writing to a file with a database (possibly MongoDB or local)
+
 module.exports = {
   tokenHarvest: (USERNAME, PASSWORD, discord) => {
     moodle.init({

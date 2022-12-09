@@ -2,6 +2,7 @@
   "discord": {
     "token": "youraveragediscordtoken",
     "id": "yourbotaccountid"
+    "owner": "yourowneridhere"
   },
   "moodle": {
     "url": "https://yourmoodle.url/",

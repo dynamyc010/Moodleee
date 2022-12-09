@@ -1,8 +1,23 @@
 const fs = require('node:fs');
 const { Client, Collection, Intents, MessageEmbed } = require('discord.js');
 const config = require('./config.json');
+const path = require('path');
+const cron = require('node-cron');
 
 const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
+
+const eventsPath = path.join(__dirname, 'events');
+const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js'));
+
+for (const file of eventFiles) {
+	const filePath = path.join(eventsPath, file);
+	const event = require(filePath);
+	if (event.once) {
+		client.once(event.name, (...args) => event.execute(...args));
+	} else {
+		client.on(event.name, (...args) => event.execute(...args));
+	}
+}
 
 client.commands = new Collection();
 
@@ -15,7 +30,14 @@ for (const file of commandFiles) {
 	client.commands.set(command.data.name, command);
 }
 
+// Scheduler options
+const scheduler = cron.schedule("0 0 6,18 * * *", () => client.emit('scheduledGetAssignments', client),{scheduled: false, timezone: 'Europe/Budapest'},false,'Europe/Budapest')
+
+// Login and setup
+// + Start Scheduler
 client.once('ready', () => {
+	scheduler.start();
+	//client.emit('scheduledGetAssignments',client);
 	console.log('Ready! I\'m active as of ' + client.readyAt + ', as ' + client.user.tag);
 });
 

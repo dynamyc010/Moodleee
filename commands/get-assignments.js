@@ -1,20 +1,16 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
+const { SlashCommandBuilder, hyperlink, italic, time } = require('@discordjs/builders');
 var moodle = require('moodle-client');
 var config = require('../config.json');
-var fs = require('fs');
 const { MessageEmbed } = require('discord.js');
+
 
 let errorEmbed = new MessageEmbed()
 .setColor(config.colors.red)
 .setTitle('Oh no! An error occurred!')
 .setTimestamp()
 
-let assigmentEmbed = new MessageEmbed()
-.setColor(config.colors.blue)
-.setTitle('Your assignments: ') 
-.setTimestamp()
 
-
+// TODO: Check if the amount of assignments is more than Discord's 4000 character limit
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('get-assignments')
@@ -38,17 +34,23 @@ module.exports = {
             }).then(function(client) {
                 client.call({
                     wsfunction: "core_calendar_get_calendar_upcoming_view",
-            
                 }).then(function(value) {
+                    let assigmentEmbed = new MessageEmbed()
+                        .setColor(config.colors.blue)
+                        .setTitle('Your assignments: ') 
+                        .setTimestamp();
                     if(value.events.length === 0){
-                        assigmentEmbed.setTitle("You have no assignments!");
-                        assigmentEmbed.setDescription("You're all done for now! Good job!");
+                        assigmentEmbed.setTitle("You have no assignments!")
+                            .setDescription("You're all done for now! Good job!")
+                            .setFooter({text: `No unfinished assignments found.`, iconURL: interaction.user.avatarURL()});
                         return interaction.editReply({embeds: [assigmentEmbed], ephemeral: true});
                     }
                     value.events.forEach(event => {
-                        assigmentEmbed.addField(event.name, `${event.course.fullname}\nDue: <t:${event.timesort}:R>\n${event.url}`);
-                        interaction.editReply({embeds: [assigmentEmbed], ephemeral: true});
-                    });
+                        assigmentEmbed
+                            .addField(event.name.replace(" esedékes", ""), `${event.course.fullname}\nDue: ${time(event.timesort, "R")}\n${italic(hyperlink('Open assignment', event.url))}`)
+                            .setFooter({text: `${value.events.length} assignments found.`, iconURL: interaction.user.avatarURL()});
+                            interaction.editReply({embeds: [assigmentEmbed], ephemeral: true});
+                        });
                     return;
                 });
             
