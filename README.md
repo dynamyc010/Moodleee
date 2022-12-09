@@ -11,3 +11,7 @@
 - Gather assignments you missed (and haven't given in anything for)
 - <s>Figure out what the hell most of the API does</s> I give up
 - Warn user ~2 hours before the deadline. <s>Otherwise, send a DM every 12 hours. (Maybe at 6AM and 6PM?)</s> <i>This part's done.</i>
+
+## Possible improvements:
+- Break up the register file a little... <i>it got messy real quick lol</i>
+- Move the tokens off to either a real database or at least a separate file. Either that, or move it into RAM, but that might get a bit crappy to use. (But it is the best for security!)
