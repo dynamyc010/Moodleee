@@ -39,12 +39,12 @@ module.exports = {
                         .setColor(config.colors.blue)
                         .setTitle('Your assignments: ') 
                         .setTimestamp();
-                    console.log(value);
                     if(value.events === undefined){
+                        if(value.errorcode == "invalidtoken")
                         errorEmbed
                             .setTitle("So sorry! An error has occured.")
-                            .setDescription("We couldn't get your assignments for some reason.")
-                            .setFooter({text: "Your token likely got revoked. Please log in again using /register connect."});
+                            .setDescription("We couldn't get your assignments because your token got revoked.")
+                            .setFooter({text: "Log in again using /register connect."});
                         return interaction.editReply({embeds: [errorEmbed], ephemeral: true});
                     }
                     if(value.events.length === 0){
