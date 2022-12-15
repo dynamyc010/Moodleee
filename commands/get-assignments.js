@@ -39,7 +39,8 @@ module.exports = {
                         .setColor(config.colors.blue)
                         .setTitle('Your assignments: ') 
                         .setTimestamp();
-                    if(value === undefined){
+                    console.log(value);
+                    if(value.events === undefined){
                         errorEmbed
                             .setTitle("So sorry! An error has occured.")
                             .setDescription("We couldn't get your assignments for some reason.")
