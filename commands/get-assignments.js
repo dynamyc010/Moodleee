@@ -40,7 +40,11 @@ module.exports = {
                         .setTitle('Your assignments: ') 
                         .setTimestamp();
                     if(value === undefined){
-
+                        errorEmbed
+                            .setTitle("So sorry! An error has occured.")
+                            .setDescription("We couldn't get your assignments for some reason.")
+                            .setFooter({text: "Your token likely got revoked. Please log in again using /register connect."});
+                        return interaction.editReply({embeds: [errorEmbed], ephemeral: true});
                     }
                     if(value.events.length === 0){
                         assigmentEmbed.setTitle("You have no assignments!")
