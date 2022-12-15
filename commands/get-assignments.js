@@ -18,7 +18,7 @@ module.exports = {
         async execute(interaction) {
             await interaction.deferReply({ ephemeral: true });
             try{
-                var token = config.moodle.tokens.find(x => x.discordid === interaction.member.id).token;
+                var token = config.moodle.tokens.find(x => x.discordid === interaction.user.id).token;
             }
             catch(err){
                 errorEmbed
@@ -39,6 +39,9 @@ module.exports = {
                         .setColor(config.colors.blue)
                         .setTitle('Your assignments: ') 
                         .setTimestamp();
+                    if(value === undefined){
+
+                    }
                     if(value.events.length === 0){
                         assigmentEmbed.setTitle("You have no assignments!")
                             .setDescription("You're all done for now! Good job!")
@@ -52,8 +55,12 @@ module.exports = {
                             interaction.editReply({embeds: [assigmentEmbed], ephemeral: true});
                         });
                     return;
+                }).catch(function(err) {
+                    errorEmbed
+                        .setDescription("Failed to connect to Moodle!")
+                        .setFooter({text: `Please try again later. ${err}`});
+                    return interaction.editReply({embeds: [errorEmbed], ephemeral: true});
                 });
-            
             }).catch(function(err) {
                 errorEmbed
                     .setDescription("Failed to connect to Moodle!")
