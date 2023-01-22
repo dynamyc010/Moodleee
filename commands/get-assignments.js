@@ -2,13 +2,12 @@ const { SlashCommandBuilder, hyperlink, italic, time } = require('@discordjs/bui
 var moodle = require('moodle-client');
 var config = require('../config.json');
 const { MessageEmbed } = require('discord.js');
-
+const { contains, alreadyDone } = require('../src/misc');
 
 let errorEmbed = new MessageEmbed()
-.setColor(config.colors.red)
-.setTitle('Oh no! An error occurred!')
-.setTimestamp()
-
+    .setColor(config.colors.red)
+    .setTitle('Oh no! An error occurred!')
+    .setTimestamp()
 
 // TODO: Check if the amount of assignments is more than Discord's 4000 character limit
 module.exports = {
@@ -35,6 +34,7 @@ module.exports = {
                 client.call({
                     wsfunction: "core_calendar_get_calendar_upcoming_view",
                 }).then(function(value) {
+                    var user = config.moodle.tokens.find(x => x.discordid === interaction.user.id);
                     let assigmentEmbed = new MessageEmbed()
                         .setColor(config.colors.blue)
                         .setTitle('Your assignments: ') 
@@ -53,11 +53,18 @@ module.exports = {
                             .setFooter({text: `No unfinished assignments found.`, iconURL: interaction.user.avatarURL()});
                         return interaction.editReply({embeds: [assigmentEmbed], ephemeral: true});
                     }
+                    // Since we may not have anything in here, let's make sure.
+                    if(!user.done){ 
+                        user.done = []
+                    }
                     value.events.forEach(event => {
-                        assigmentEmbed
-                            .addField(event.name.replace(" esedékes", ""), `${event.course.fullname}\nDue: ${time(event.timesort, "R")}\n${italic(hyperlink('Open assignment', event.url))}`)
-                            .setFooter({text: `${value.events.length} assignments found.`, iconURL: interaction.user.avatarURL()});
-                            interaction.editReply({embeds: [assigmentEmbed], ephemeral: true});
+                        if(!alreadyDone(user.done,event.id)){
+                                assigmentEmbed
+                                    .addField(event.name.replace(" esedékes", ""), `${event.course.fullname}\nDue: ${time(event.timesort, "R")}\n${italic(hyperlink('Open assignment', event.url))} - ${event.id}`)
+                                    .setFooter({text: `${value.events.length} assignments found.`, iconURL: interaction.user.avatarURL()})
+                                    .setDescription("You can use `/done <assignment ID>` to mark one as done.");
+                                interaction.editReply({embeds: [assigmentEmbed], ephemeral: true});
+                            }
                         });
                     return;
                 }).catch(function(err) {

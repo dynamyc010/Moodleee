@@ -1,5 +1,3 @@
-const { nodeModuleNameResolver } = require("typescript");
-
 module.exports = {
   contains: (arr, key, val) => {
       for (var i = 0; i < arr.length; i++) {
@@ -7,8 +5,11 @@ module.exports = {
       }
       return false;
     },
-
-    getAssignments: (token, callback) => {
-      const moodle = require('moodle-client');
-    }
+  // god I hate this
+  alreadyDone: (arr, val) => {
+      for (var i = 0; i < arr.length; i++) {
+        if (arr[i] === val) return true;
+      }
+      return false;
+  }
 }

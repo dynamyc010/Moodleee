@@ -49,14 +49,26 @@ client.on('interactionCreate', async interaction => {
 		await command.execute(interaction);
 	} catch (error) {
 		console.error(error);
-		await interaction.reply({ embeds: [
-			new MessageEmbed()
-				.setColor(config.colors.red)
-				.setTitle('Oh no! An error occurred!')
-				.setTimestamp()
-				.setDescription(`I'm so sorry, an error has occured!`)
-				.setFooter({ text: `Please try again later. ${error}` })
-		], ephemeral: true });
+		try{
+			await interaction.reply({ embeds: [
+				new MessageEmbed()
+					.setColor(config.colors.red)
+					.setTitle('Oh no! An error occurred!')
+					.setTimestamp()
+					.setDescription(`I'm so sorry, an error has occured!`)
+					.setFooter({ text: `Please try again later. ${error}` })
+			], ephemeral: true });
+		}
+		catch(INTERACTION_ALREADY_REPLIED){
+			await interaction.editReply({ embeds: [
+				new MessageEmbed()
+					.setColor(config.colors.red)
+					.setTitle('Oh no! An error occurred!')
+					.setTimestamp()
+					.setDescription(`I'm so sorry, an error has occured!`)
+					.setFooter({ text: `Please try again later. ${error}` })
+			], ephemeral: true });
+		}
 	}
 });
 

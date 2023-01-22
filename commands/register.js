@@ -47,8 +47,10 @@ module.exports = {
           }).then(function(client) {
             if(contains(config.moodle.tokens, "discordid", interaction.user.id)){
               //console.log("Token already exists for this discord user");
-              config.moodle.tokens.find(x => x.discordid === interaction.user.id).token = client.token;
-              config.moodle.tokens.find(x => x.discordid === interaction.user.id).scheduler = schedulerValue;
+              var user = config.moodle.tokens.find(x => x.discordid === interaction.user.id);
+              user.token = client.token;
+              user.scheduler = schedulerValue;
+              user.done = [];
             }
             else{
               //console.log("Token does not exist for this discord user");
