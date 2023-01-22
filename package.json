@@ -21,6 +21,7 @@
     "@discordjs/builders": "^0.13.0",
     "@discordjs/rest": "^0.4.1",
     "cron": "^2.1.0",
+    "dayjs": "^1.11.7",
     "discord-api-types": "^0.32.1",
     "discord.js": "^13.6.0",
     "fs": "^0.0.1-security",

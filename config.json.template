@@ -6,6 +6,7 @@
   },
   "moodle": {
     "url": "https://yourmoodle.url/",
+    "schedule": "0 0 6,18 * * *",
     "tokens": []
   },
   "colors": {

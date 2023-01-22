@@ -2,7 +2,7 @@ const { SlashCommandBuilder, hyperlink, italic, time } = require('@discordjs/bui
 var moodle = require('moodle-client');
 var config = require('../config.json');
 const { MessageEmbed } = require('discord.js');
-const { contains, alreadyDone } = require('../src/misc');
+const { alreadyDone } = require('../src/misc');
 
 let errorEmbed = new MessageEmbed()
     .setColor(config.colors.red)

@@ -1,18 +1,20 @@
 const moodle = require('moodle-client');
+const dayjs = require('dayjs').extend(require('dayjs/plugin/localizedFormat'))
 const config = require('../config.json');
 const { MessageEmbed } = require('discord.js');
 const { hyperlink, italic, time } = require('@discordjs/builders');
+const { alreadyDone } = require('../src/misc')
 
 module.exports = {
 	name: 'scheduledGetAssignments',
 	once: false,
 	execute(client) {
-		console.log(`[${Date.now()}]Running scheduled events...`)
-		config.moodle.tokens.forEach((token) => {
-			if(token.scheduler === true){
+		console.log(`[${dayjs(new Date()).format('L LTS')}] Running scheduled events...`)
+		config.moodle.tokens.forEach((user) => {
+			if(user.scheduler === true){
 				moodle.init({
 					wwwroot: config.moodle.url,
-					token: token.token,
+					token: user.token,
 					service: "moodleee-discord-bot",
 					moodlewsrestformat: 'json',
 				}).then(function(mClient) {
@@ -26,13 +28,21 @@ module.exports = {
 						if(value.events.length === 0){
 							return;
 						}
-						client.users.fetch(token.discordid).then((user) => {
+						client.users.fetch(user.discordid).then((userObj) => {
+							if(!user.done){ 
+								user.done = []
+							}
 							value.events.forEach((event) => {
-								assigmentEmbed
-									.addField(event.name.replace(" esedékes", ""), `${event.course.fullname}\nDue: ${time(event.timesort, "R")}\n${italic(hyperlink('Open assignment', event.url))}`)
-									.setFooter({text: `${value.events.length} assignments found.`, iconURL: user.avatarURL()});
-								});
-							user.send({embeds: [assigmentEmbed]});
+								if(!alreadyDone(user.done,event.id)){
+									assigmentEmbed
+										.addField(event.name.replace(" esedékes", ""), `${event.course.fullname}\nDue: ${time(event.timesort, "R")}\n${italic(hyperlink('Open assignment', event.url))} - ${event.id}`)
+										.setFooter({text: `${value.events.length} assignments found.`, iconURL: userObj.avatarURL()})
+										.setDescription("You can use `/done <assignment ID>` to mark one as done.");
+								}
+							});
+							if(assigmentEmbed.fields.length != 0){
+								userObj.send({embeds: [assigmentEmbed]});
+							}
 							return;
 						});
 					});

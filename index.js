@@ -29,8 +29,9 @@ for (const file of commandFiles) {
 }
 
 // Scheduler options
-// TODO: Read time from config
-const scheduler = cron.schedule("0 0 6,18 * * *", () => client.emit('scheduledGetAssignments', client),{scheduled: false, timezone: 'Europe/Budapest'},false,'Europe/Budapest')
+const cronSchedule = (config.moodle.schedule && cron.validate(config.moodle.schedule)) ? config.moodle.schedule : "0 0 6,18 * *";
+console.log(`Starting scheduler using cron expression: ${cronSchedule}`)
+const scheduler = cron.schedule(cronSchedule, () => client.emit('scheduledGetAssignments', client),{scheduled: false, timezone: 'Europe/Budapest'},false,'Europe/Budapest')
 
 // Login and setup
 // + Start Scheduler
