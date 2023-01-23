@@ -57,7 +57,7 @@ module.exports = {
                     if(!user.done){ 
                         user.done = []
                     }
-                    var i = 0;
+                    let i = 0;
                     value.events.forEach(event => {
                         if(!alreadyDone(user.done,event.id)){
                                 assigmentEmbed
