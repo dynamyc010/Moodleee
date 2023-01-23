@@ -57,11 +57,12 @@ module.exports = {
                     if(!user.done){ 
                         user.done = []
                     }
+                    var i = 0;
                     value.events.forEach(event => {
                         if(!alreadyDone(user.done,event.id)){
                                 assigmentEmbed
                                     .addField(event.name.replace(" esedékes", ""), `${event.course.fullname}\nDue: ${time(event.timesort, "R")}\n${italic(hyperlink('Open assignment', event.url))} - ${event.id}`)
-                                    .setFooter({text: `${value.events.length} assignments found.`, iconURL: interaction.user.avatarURL()})
+                                    .setFooter({text: `${++i} assignments found.`, iconURL: interaction.user.avatarURL()})
                                     .setDescription("You can use `/done <assignment ID>` to mark one as done.");
                                 interaction.editReply({embeds: [assigmentEmbed], ephemeral: true});
                             }
