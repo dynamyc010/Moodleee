@@ -50,7 +50,7 @@ module.exports = {
                     if(value.events.length === 0){
                         assigmentEmbed.setTitle("You have no assignments!")
                             .setDescription("You're all done for now! Good job!")
-                            .setFooter({text: `No unfinished assignments found.`, iconURL: interaction.user.avatarURL()});
+                            .setFooter({text: `No assignments found.`, iconURL: interaction.user.avatarURL()});
                         return interaction.editReply({embeds: [assigmentEmbed], ephemeral: true});
                     }
                     // Since we may not have anything in here, let's make sure.
@@ -67,6 +67,12 @@ module.exports = {
                                 interaction.editReply({embeds: [assigmentEmbed], ephemeral: true});
                             }
                         });
+                    if(assigmentEmbed.fields.length == 0){
+                        assigmentEmbed.setTitle("You have no assignments!")
+                            .setDescription("You're all done for now! Good job!")
+                            .setFooter({text: `No unfinished assignments found, ${value.events.length} assignments found.`, iconURL: interaction.user.avatarURL()});
+                        userObj.send({embeds: [assigmentEmbed]});
+                    }
                     return;
                 }).catch(function(err) {
                     errorEmbed
