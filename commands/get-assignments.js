@@ -71,7 +71,7 @@ module.exports = {
                         assigmentEmbed.setTitle("You have no assignments!")
                             .setDescription("You're all done for now! Good job!")
                             .setFooter({text: `No unfinished assignments found, ${value.events.length} assignments found.`, iconURL: interaction.user.avatarURL()});
-                        userObj.send({embeds: [assigmentEmbed]});
+                        interaction.editReply({embeds: [assigmentEmbed], ephemeral: true});
                     }
                     return;
                 }).catch(function(err) {
